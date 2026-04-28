@@ -32,10 +32,12 @@
     background: var(--sky1);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;   /* スマホで上から並ぶように */
     min-height: 100vh;
-    overflow: hidden;
+    overflow-y: auto;          /* タイトル画面をスクロール可能に */
+    overflow-x: hidden;
     user-select: none;
+    padding: 12px 0 24px;      /* 上下に少し余白 */
   }
 
   /* ===== SCREENS ===== */
@@ -52,9 +54,9 @@
     background: linear-gradient(180deg, #c9f0ff 0%, #e8f9ff 40%, #a0dff7 100%);
     border-radius: 32px;
     box-shadow: 0 8px 40px var(--shadow);
-    padding: 28px 24px 24px;
+    padding: 16px 20px 20px;   /* スマホ向けに余白を縮小 */
     text-align: center;
-    min-height: 600px;
+    /* min-height削除: コンテンツに合わせて可変に */
   }
 
   .title-logo {
@@ -625,7 +627,7 @@ document.getElementById('speedSlider').addEventListener('input', function(){
 
 document.getElementById('startBtn').addEventListener('click', startGame);
 document.getElementById('rankingLink').addEventListener('click', showRanking);
-document.getElementById('backBtn').addEventListener('click', ()=>showScreen('titleScreen'));
+document.getElementById('backBtn').addEventListener('click', ()=>{ document.body.style.overflow='auto'; document.body.style.padding='12px 0 24px'; showScreen('titleScreen'); });
 document.getElementById('pauseBtn').addEventListener('click', togglePause);
 document.getElementById('resumeBtn').addEventListener('click', togglePause);
 document.getElementById('pauseTitleBtn').addEventListener('click', ()=>{
@@ -633,8 +635,16 @@ document.getElementById('pauseTitleBtn').addEventListener('click', ()=>{
   showScreen('titleScreen');
 });
 document.getElementById('registerBtn').addEventListener('click', registerScore);
-document.getElementById('retryBtn').addEventListener('click', ()=>{ showScreen('titleScreen'); });
-document.getElementById('titleBtn').addEventListener('click', ()=>showScreen('titleScreen'));
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  document.body.style.overflow = 'auto';
+  document.body.style.padding = '12px 0 24px';
+  showScreen('titleScreen');
+});
+document.getElementById('titleBtn').addEventListener('click', ()=>{
+  document.body.style.overflow = 'auto';
+  document.body.style.padding = '12px 0 24px';
+  showScreen('titleScreen');
+});
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -751,6 +761,8 @@ let stormFlash = 0;
 let jumpPressed = false;
 
 function startGame(){
+  document.body.style.overflow = 'hidden'; // ゲーム中はスクロール禁止
+  document.body.style.padding = '0';
   initAudio();
   stopBGM();
   diffCfg = DIFF[selectedDiff];
